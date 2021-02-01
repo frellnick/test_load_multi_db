@@ -2,3 +2,5 @@ notebook
 numpy
 pandas
 pip
+python-decouple
+sqlalchemy

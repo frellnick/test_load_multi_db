@@ -1,0 +1,1 @@
+copy test from '/data/test.csv' delimiter ',' csv header;
