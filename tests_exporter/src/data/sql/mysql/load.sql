@@ -1,1 +1,1 @@
-copy {tablename} from '/data/{tablename}.csv' delimiter ',' csv header;
+LOAD DATA LOCAL INFILE 'data/{tablename}.csv' INTO table {tablename} FIELDS TERMINATED BY ',';

@@ -1,6 +1,9 @@
+cryptography
 notebook
 numpy
 pandas
 pip
 python-decouple
 sqlalchemy
+psycopg2
+pymysql

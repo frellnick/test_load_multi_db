@@ -28,5 +28,14 @@ vbrandon/postgres:v0
 
 
 ### Ports
-* PostgreSQL    5432:5432
 * MySQL         3306:3306
+* PostgreSQL    5432:5432
+
+
+### Required Run Flags
+* MySQL         --local-infile=1
+
+
+#### Run Statements
+* MySQL         docker run -it -p 3306:3306 --name testmsql --mount type=bind,source=/path/to/data/folder,targer=/data repo/mysql:tag --local-infile=1
+* PostgreSQL    

@@ -12,8 +12,13 @@ def _mpath(*args) -> str:
         return t
 
 
+def _get_dburi()->str:
+    t = config('DBTYPE').upper()
+    return config(f'{t}_DBURI')
+
+
 DATABASE = {
-    'DBURI': config('DBURI'),
+    'DBURI': _get_dburi(),
     'DBTYPE': config('DBTYPE', default='postgres')
 }
 

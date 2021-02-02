@@ -6,4 +6,6 @@ ENV MYSQL_PASSWORD=dockerpass \
     MYSQL_ROOT_PASSWORD=dockerpass
 
 # Copy folder into container - Data must be mounted prior to container creation
-# COPY scripts/* /scripts/
+COPY scripts/* /docker-entrypoint-initdb.d/
+
+WORKDIR /scripts/
