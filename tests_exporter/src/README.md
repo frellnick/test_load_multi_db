@@ -25,3 +25,8 @@ docker run -d -it -p 5432:5432\
 --mount type=bind,source="$(pwd)"/data,target=/data \
 vbrandon/postgres:v0
 ```
+
+
+### Ports
+* PostgreSQL    5432:5432
+* MySQL         3306:3306

@@ -39,6 +39,10 @@ def _table_exists(tablename:str) -> bool:
         return False
 
 
+def _update_tablename(s:str, tablename) -> str:
+    return s.replace('{tablename}', tablename)
+
+
 def _execute(query:str):
     try:
         query_db(query)
@@ -48,13 +52,17 @@ def _execute(query:str):
 
 def _create_load_table(tablename:str):
     if _table_exists(tablename):
-        print('table already exists')
+        print(f'Table {tablename} already exists')
     else:
+        print(f'Creating table: {tablename}')
         _execute(
             _load_sql(f'create_{tablename}.sql')
             )
+        print(f'Loading table: {tablename}')
         _execute(
-            _load_sql(f'load_{tablename}.sql')
+            _update_tablename(
+                _load_sql(f'load.sql'), tablename
+            )
             )
 
 
@@ -68,9 +76,11 @@ def _create_tables():
             raise e
 
 def run():
+    print('Testing Database Connection')
     _test_db()
+    print("Running table creation and loading.")
     _create_tables()
-    print('hello from python app')
+    print('Load complete')
 
 
 

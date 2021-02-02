@@ -1,0 +1,9 @@
+{
+    "tables":[
+        "test",
+        "dws_wages",
+        "usbe_students",
+        "ushe_students",
+        "ustc_students"
+    ]
+}

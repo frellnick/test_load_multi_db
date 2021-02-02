@@ -1,0 +1,1 @@
+copy {tablename} from '/data/{tablename}.csv' delimiter ',' csv header;

@@ -19,8 +19,16 @@ DATABASE = {
 
 
 DATA = {
-    'DATA': _mpath(config('DATADIR')),
-    'SQL': _mpath(config('SQLDIR'), config('DBTYPE')),
-    'QUERY_PLAN': _mpath(config('QUERY_PLAN'), config('DBTYPE'), 'query_plan.json'),
+    'DATA': _mpath(
+        config('DATADIR')),
+    'SQL': _mpath(
+        config('DATADIR'), 
+        config('SQLDIR'), 
+        config('DBTYPE')),
+    'QUERY_PLAN': _mpath(
+        config('DATADIR'),
+        config('QUERY_PLAN'),
+        'query_plan.json'
+        ),
 }
 
