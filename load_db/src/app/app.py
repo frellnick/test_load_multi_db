@@ -1,8 +1,10 @@
 import logging
-from config import DATA
+from config import DATA, VALIDATION, DATABASE
 from db import get_db, query_db
 import os
 import json
+import argparse
+
 
 log = logging.getLogger(__name__)
 
@@ -38,6 +40,8 @@ def _table_exists(tablename:str) -> bool:
     except Exception as e:
         return False
 
+def _database_type_valid(dbtype:str) -> bool:
+    return dbtype in VALIDATION['SUPPORTED_DB']
 
 def _update_tablename(s:str, tablename) -> str:
     return s.replace('{tablename}', tablename)
@@ -88,6 +92,26 @@ def run():
     log.info('Load complete')
 
 
-
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Load database with prepared data.`')
+    parser.add_argument(
+        '--dbtype', 
+        metavar='db', 
+        type=str,
+        help="Database Type. Currently support 'mysql' or 'postgres'."
+        )
+    parser.add_argument(
+        '--uri',
+        metavar='uri',
+        type=str,
+        help='Database URI.  Must be fully constructed.  Example postgres://user:pass@ip.add/db_name'
+    )
+
+    args = parser.parse_args()
+    if args.dbtype is not None:
+        assert args.uri is not None, f'Must provide a URI to {args.dbtype} database.'
+        assert _database_type_valid(args.dbtype), f'{args.dbtype} not supported.'
+        DATABASE['DBTYPE'] = args.dbtype
+        DATABASE['DBURI'] = args.uri
+
     run()

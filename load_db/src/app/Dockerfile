@@ -38,6 +38,7 @@ ENTRYPOINT ["/usr/bin/tini", "--"]
 
 # Install dependencies
 RUN conda init
+RUN conda config --add channels conda-forge
 RUN conda install --file requirements.yaml
 # Test run application
 

@@ -16,6 +16,10 @@ def _get_dburi()->str:
     t = config('DBTYPE').upper()
     return config(f'{t}_DBURI')
 
+VALIDATION = {
+    'SUPPORTED_DB': config('SUPPORTED_DB').split(',')
+}
+
 
 DATABASE = {
     'DBURI': _get_dburi(),

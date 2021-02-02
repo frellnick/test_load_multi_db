@@ -36,6 +36,15 @@ vbrandon/postgres:v0
 * MySQL         --local-infile=1
 
 
-#### Run Statements
+### Run Statements
+* loader        docker run pyloader python app.py --dbtype postgres --uri postgres://docker:dockerpass@localhost/testdata
 * MySQL         docker run -it -p 3306:3306 --name testmsql --mount type=bind,source=/path/to/data/folder,targer=/data repo/mysql:tag --local-infile=1
-* PostgreSQL    docker run -it -p 5432:5432 --name testpostgres --mount type=bind,source=/path/to/data/folder,targer=/data repo/mysql:tag --local-infile=1
+* PostgreSQL    docker run -it -p 5432:5432 --name testpostgres --mount type=bind,source=/path/to/data/folder,target=/data repo/postgres:tag
+
+
+### REPL, Jupyter Notebook, and bash interfaces
+* loader(Jupyter Notebook)
+
+```bash
+    docker run -p 8888:8888 vbrandon/pyloader:V0 jupyter notebook --ip 0.0.0.0 --allow-root --no-browser
+```
