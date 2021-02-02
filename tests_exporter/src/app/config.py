@@ -3,7 +3,6 @@ import os
 import logging
 
 
-
 def _mpath(*args) -> str:
     p = os.path.join(*args)
     if os.path.isdir(p):
@@ -21,6 +20,7 @@ DATABASE = {
 
 DATA = {
     'DATA': _mpath(config('DATADIR')),
-    'SQL': _mpath(config('SQLDIR'), config('DBTYPE'))
+    'SQL': _mpath(config('SQLDIR'), config('DBTYPE')),
+    'QUERY_PLAN': _mpath(config('QUERY_PLAN'), config('DBTYPE'), 'query_plan.json'),
 }
 
