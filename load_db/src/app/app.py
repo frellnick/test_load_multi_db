@@ -53,8 +53,10 @@ def _execute(query:str):
 def _create_load_table(tablename:str):
     if _table_exists(tablename):
         print(f'Table {tablename} already exists')
+        log.info(f'Table {tablename} already exists')
     else:
         print(f'Creating table: {tablename}')
+        log.info(f'Creating table: {tablename}')
         _execute(
             _load_sql(f'create_{tablename}.sql')
             )
@@ -77,10 +79,13 @@ def _create_tables():
 
 def run():
     print('Testing Database Connection')
+    log.info('Testing Database Connection')
     _test_db()
     print("Running table creation and loading.")
+    log.info("Running table creation and loading.")
     _create_tables()
     print('Load complete')
+    log.info('Load complete')
 
 
 

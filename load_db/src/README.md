@@ -38,4 +38,4 @@ vbrandon/postgres:v0
 
 #### Run Statements
 * MySQL         docker run -it -p 3306:3306 --name testmsql --mount type=bind,source=/path/to/data/folder,targer=/data repo/mysql:tag --local-infile=1
-* PostgreSQL    
+* PostgreSQL    docker run -it -p 5432:5432 --name testpostgres --mount type=bind,source=/path/to/data/folder,targer=/data repo/mysql:tag --local-infile=1
