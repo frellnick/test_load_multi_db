@@ -1,5 +1,5 @@
 import logging
-from config import DATA, VALIDATION, DATABASE, gen_data_paths
+from config import lconfig
 from db import get_db, query_db
 import os
 import json
@@ -41,7 +41,7 @@ def _table_exists(tablename:str) -> bool:
         return False
 
 def _database_type_valid(dbtype:str) -> bool:
-    return dbtype in VALIDATION['SUPPORTED_DB']
+    return dbtype in lconfig['SUPPORTED_DB']
 
 def _update_tablename(s:str, tablename) -> str:
     return s.replace('{tablename}', tablename)
@@ -73,7 +73,7 @@ def _create_load_table(tablename:str):
 
 
 def _create_tables():
-    qplan = _read_json(DATA['QUERY_PLAN'])
+    qplan = _read_json(lconfig['QUERY_PLAN'])
     tables = qplan['tables']
     for t in tables:
         try:
@@ -118,12 +118,12 @@ if __name__ == "__main__":
     if args.dbtype is not None:
         assert args.uri is not None, f'Must provide a URI to {args.dbtype} database.'
         assert _database_type_valid(args.dbtype), f'{args.dbtype} not supported.'
-        DATABASE['DBTYPE'] = args.dbtype
-        DATABASE['DBURI'] = args.uri
+        lconfig['DBTYPE'] = args.dbtype
+        lconfig['DBURI'] = args.uri
 
     if args.datadir is not None:
         assert os.path.exists(args.datadir), f'{args.datadir} not found'
-        DATA = gen_data_paths(args.datadir, args.dbtype)
+        lconfig['DATADIR'] = args.datadir
         
 
     run()

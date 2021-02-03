@@ -19,6 +19,7 @@ DEFAULTS = {
     'DATADIR': config('DATADIR'),
     'SQLDIR': config('SQLDIR'),
     'QUERY_PLAN': config('QUERY_PLAN'),
+    'DBTYPE': config('DBTYPE', default='postgres'),
 }
 
 # Live Config
@@ -26,19 +27,26 @@ DEFAULTS = {
 #   without environment corruption.
 class Config():
     def __init__(self, defaults=DEFAULTS):
-        self.store = {}
+        self.store = defaults
         self.savepath = '/tmp/appsettings.json'
-        self.update(defaults)
+        self.save
+        self.update(defaults) ## sanity check
         
 
     def update(self, keyvals):
+        def _dirflag(l, flagkeys=['DBTYPE', 'DATADIR', 'SQLDIR', 'QUERY_PLAN']):
+            for k in l:
+                if k in flagkeys:
+                    return True 
+            return False
+
+        if _dirflag(list(keyvals.keys())):
+            data_paths = self._gen_data_paths()
+            keyvals.update(data_paths)
+
         for key in keyvals:
             self.store[key] = keyvals[key]
         self.save()
-
-        if 'DBTYPE' in keyvals:
-            data_paths = self._gen_data_paths()
-            self.update(data_paths)
 
 
     def save(self):
@@ -80,3 +88,5 @@ class Config():
             ),
         }
         return d
+
+lconfig = Config()
