@@ -6,17 +6,16 @@ import json
 
 def _mpath(*args) -> str:
     p = os.path.join(*args)
-    if os.path.isdir(p):
+    if os.path.isdir(p) or os.path.isfile(p):
         return p
     else:
-        t = os.path.join(os.getcwd(), p)
-        return t
+        raise ValueError(f"{p} not found or is not a directory")
 
 
 DEFAULTS = {
     'SUPPORTED_DB': config('SUPPORTED_DB').split(','),
     'DEBUG': config('DEBUG'),
-    'DATADIR': config('DATADIR'),
+    'DATADIR': config('DATADIR', default=''),
     'SQLDIR': config('SQLDIR'),
     'QUERY_PLAN': config('QUERY_PLAN'),
     'DBTYPE': config('DBTYPE', default='postgres'),

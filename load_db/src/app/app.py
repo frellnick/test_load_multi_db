@@ -29,7 +29,7 @@ def _read_json(p:str) -> dict:
 
 
 def _load_sql(p:str) -> str:
-    p = os.path.join(DATA['SQL'], p)
+    p = os.path.join(lconfig['SQL'], p)
     return _read(p)
 
 
@@ -124,6 +124,7 @@ if __name__ == "__main__":
     if args.datadir is not None:
         assert os.path.exists(args.datadir), f'{args.datadir} not found'
         lconfig['DATADIR'] = args.datadir
+        print(lconfig['DATADIR'])
         
 
     run()

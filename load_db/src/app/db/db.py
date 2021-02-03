@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from contextlib import contextmanager
 import logging
-from config import DATABASE
+from config import lconfig
 
 
 ###############################
@@ -19,7 +19,7 @@ def get_db(raw=False) -> sqlalchemy.engine:
     Returns current database connection.  If connection not present,
     initiates connection to configured database.  Default is non-authenticated SQL.
     """
-    db_uri = DATABASE['DBURI']
+    db_uri = lconfig['DBURI']
     db_logger = logging.getLogger(__name__ + '.getdb')
     db_logger.info('Attempting connection to {}.'.format(db_uri))
     try:
