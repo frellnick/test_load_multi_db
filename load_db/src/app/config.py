@@ -2,14 +2,22 @@ from decouple import config
 import os
 import logging
 import json
-
+import warnings
 
 def _mpath(*args) -> str:
+    def _check_fullpath(p:str) -> (bool, str):
+        fp = os.path.join(os.getcwd(), p)
+        return os.path.isfile(fp) or os.path.isdir(fp), fp
+
     p = os.path.join(*args)
     if os.path.isdir(p) or os.path.isfile(p):
         return p
     else:
-        raise ValueError(f"{p} not found or is not a directory")
+        exists, fp = exists, fp = _check_fullpath(p)
+        if exists:
+            return fp
+        warnings.warn(f"{p} or {fp} not found or is not a directory")
+        return p
 
 
 DEFAULTS = {
@@ -33,15 +41,13 @@ class Config():
         
 
     def update(self, keyvals):
-        def _dirflag(l, flagkeys=['DBTYPE', 'DATADIR', 'SQLDIR', 'QUERY_PLAN']):
-            for k in l:
-                if k in flagkeys:
-                    return True 
-            return False
 
-        if _dirflag(list(keyvals.keys())):
-            data_paths = self._gen_data_paths()
+        if 'DATADIR' in keyvals:
+            print('Updating root data directory.')
+            data_paths = self._gen_data_paths(root=keyvals['DATADIR'])
+            print(data_paths)
             keyvals.update(data_paths)
+            print(keyvals)
 
         for key in keyvals:
             self.store[key] = keyvals[key]
@@ -55,7 +61,7 @@ class Config():
 
     def read(self):
         with open(self.savepath, 'r') as f:
-            self.update(json.load(f))
+            self.store = json.load(f)
 
 
     def __getitem__(self, idx):
@@ -67,9 +73,8 @@ class Config():
         self.update({key:val})
 
 
-    def _gen_data_paths(self) -> dict:
+    def _gen_data_paths(self, root) -> dict:
         dbtype = self.store['DBTYPE']
-        root = self.store['DATADIR']
         sqldir = self.store['SQLDIR']
         query_plan = self.store['QUERY_PLAN']
         d = {
@@ -87,5 +92,6 @@ class Config():
             ),
         }
         return d
+
 
 lconfig = Config()
