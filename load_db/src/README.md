@@ -37,14 +37,26 @@ vbrandon/postgres:v0
 
 
 ### Run Statements
-* loader        docker run pyloader python app.py --dbtype postgres --uri postgres://docker:dockerpass@localhost/testdata
-* MySQL         docker run -it -p 3306:3306 --name testmsql --mount type=bind,source=/path/to/data/folder,targer=/data repo/mysql:tag --local-infile=1
-* PostgreSQL    docker run -it -p 5432:5432 --name testpostgres --mount type=bind,source=/path/to/data/folder,target=/data repo/postgres:tag
+* loader        docker run --name pyloader --network host --mount type=bind,source=/path/to/data/folder,target=/data vbrandon/pyloader python app.py --dbtype postgres --uri postgres://docker:dockerpass@127.0.0.1:5432/testdata
+* MySQL         docker run -it -p 3306:3306 --network network --name testmsql --mount type=bind,source=/path/to/data/folder,targer=/data repo/mysql:tag --local-infile=1
+* PostgreSQL    docker run -it -p 5432:5432 --network network --name testpostgres --mount type=bind,source=/path/to/data/folder,target=/data repo/postgres:tag
 
 
 ### REPL, Jupyter Notebook, and bash interfaces
 * loader(Jupyter Notebook)
 
+
 ```bash
-    docker run -p 8888:8888 vbrandon/pyloader:V0 jupyter notebook --ip 0.0.0.0 --allow-root --no-browser
+# This will create a container in the 'host' network.  Use any network the DB attached to.
+docker run -p 8888:8888 --name pyloader vbrandon/pyloader:V0 jupyter notebook --ip 0.0.0.0 --allow-root --no-browser
 ```
+
+
+### Testing
+
+### Local Testing (Outside of container network with clean symlink/mount)
+ 
+ ```bash
+ # Pass relative path to data directory as well as database connection information
+ python app.py --dbtype postgres --uri postgres://docker:dockerpass@127.0.0.1:5432/testdata --datadir ../data
+ ```

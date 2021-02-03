@@ -3,8 +3,6 @@ FROM debian:buster-slim
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH /opt/conda/bin:$PATH
 
-WORKDIR /tooling
-
 # Update container
 RUN echo "Updating container and installing kernel dependencies"
 

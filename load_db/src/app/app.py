@@ -1,5 +1,5 @@
 import logging
-from config import DATA, VALIDATION, DATABASE
+from config import DATA, VALIDATION, DATABASE, gen_data_paths
 from db import get_db, query_db
 import os
 import json
@@ -77,7 +77,7 @@ def _create_tables():
     tables = qplan['tables']
     for t in tables:
         try:
-            _create_load_table(t)    
+            _create_load_table(t)
         except Exception as e:
             raise e
 
@@ -106,6 +106,13 @@ if __name__ == "__main__":
         type=str,
         help='Database URI.  Must be fully constructed.  Example postgres://user:pass@ip.add/db_name'
     )
+    parser.add_argument(
+        '--datadir',
+        metavar='data',
+        nargs='?',
+        type=str,
+        help='Path to data directory'
+    )
 
     args = parser.parse_args()
     if args.dbtype is not None:
@@ -113,5 +120,10 @@ if __name__ == "__main__":
         assert _database_type_valid(args.dbtype), f'{args.dbtype} not supported.'
         DATABASE['DBTYPE'] = args.dbtype
         DATABASE['DBURI'] = args.uri
+
+    if args.datadir is not None:
+        assert os.path.exists(args.datadir), f'{args.datadir} not found'
+        DATA = gen_data_paths(args.datadir, args.dbtype)
+        
 
     run()

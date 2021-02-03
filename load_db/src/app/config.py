@@ -27,17 +27,22 @@ DATABASE = {
 }
 
 
-DATA = {
+def gen_data_paths(root:str, dbtype=None) -> dict:
+    if dbtype is None:
+        dbtype = config('DBTYPE')
+    d = {
     'DATA': _mpath(
-        config('DATADIR')),
+        root),
     'SQL': _mpath(
-        config('DATADIR'), 
+        root, 
         config('SQLDIR'), 
-        config('DBTYPE')),
+        dbtype),
     'QUERY_PLAN': _mpath(
-        config('DATADIR'),
+        root,
         config('QUERY_PLAN'),
         'query_plan.json'
-        ),
-}
+        )
+    }
+    return d
 
+DATA = gen_data_paths(config('DATADIR'))
