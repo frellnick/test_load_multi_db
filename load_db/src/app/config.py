@@ -25,8 +25,18 @@ DEFAULTS = {
     'DEBUG': config('DEBUG'),
     'DATADIR': config('DATADIR', default=''),
     'SQLDIR': config('SQLDIR'),
-    'QUERY_PLAN': config('QUERY_PLAN'),
+    'PLANNINGFILE': config('PLANNINGFILE'),
+    'QUERY_PLAN': config('QUERY_PLAN', default='query_plan.json'),
     'DBTYPE': config('DBTYPE', default='postgres'),
+    'DBURI': config('DBURI', default=None),
+    'POSTGRES_DBURI': config(
+        'POSTGRES_DBURI', 
+        default='postgres://docker:dockerpass@127.0.0.1:5432/testdata',
+    ),
+    'MYSQL_DBURI': config(
+        'MYSQL_DBURI', 
+        default='mysql+pymysql://docker:dockerpass@127.0.0.1:3306/testdata?local_infile=1',
+    )
 }
 
 # Live Config
@@ -41,13 +51,23 @@ class Config():
         
 
     def update(self, keyvals):
+        def _contains_root_update_field(keyvals):
+            root_list = ['DBTYPE', 'SQLDIR', 'QUERY_PLAN', 'DATADIR']
+            for key in keyvals:
+                if key in root_list:
+                    return True
+            return False
+        
+        def _get_root_datadir(keyvals):
+            if 'DATADIR' in keyvals:
+                return keyvals['DATADIR']
+            return self['DATADIR']
 
-        if 'DATADIR' in keyvals:
+        if _contains_root_update_field(keyvals):
             print('Updating root data directory.')
-            data_paths = self._gen_data_paths(root=keyvals['DATADIR'])
-            print(data_paths)
+            root = _get_root_datadir(keyvals)
+            data_paths = self._gen_data_paths(root=root, **keyvals)
             keyvals.update(data_paths)
-            print(keyvals)
 
         for key in keyvals:
             self.store[key] = keyvals[key]
@@ -73,10 +93,16 @@ class Config():
         self.update({key:val})
 
 
-    def _gen_data_paths(self, root) -> dict:
-        dbtype = self.store['DBTYPE']
-        sqldir = self.store['SQLDIR']
-        query_plan = self.store['QUERY_PLAN']
+    def _gen_data_paths(self, root, **kwargs) -> dict:
+        def _default_or_new(key, kwargs=kwargs):
+            if key in kwargs:
+                return kwargs[key]
+            return self.store[key]
+
+        dbtype = _default_or_new('DBTYPE')
+        sqldir = _default_or_new('SQLDIR')
+        query_plan = _default_or_new('PLANNINGFILE')
+
         d = {
         'DATA': _mpath(
             root
@@ -88,9 +114,11 @@ class Config():
             ),
         'QUERY_PLAN': _mpath(
             root,
+            sqldir,
             query_plan
             ),
         }
+        print(d)
         return d
 
 

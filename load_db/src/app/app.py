@@ -127,4 +127,11 @@ if __name__ == "__main__":
         print(lconfig['DATADIR'])
         
 
-    run()
+    if args.dbtype is None:
+        print('Running all databases.')
+        for db in lconfig['SUPPORTED_DB']:
+            lconfig['DBTYPE'] = db
+            lconfig['DBURI'] = lconfig[f"{db.upper()+'_DBURI'}"]
+            run()
+    else:
+        run()

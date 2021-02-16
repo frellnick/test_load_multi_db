@@ -1,6 +1,15 @@
 FROM postgres:latest
 
-ENV POSTGRES_PASSWORD=dockerpass POSTGRES_USER=docker POSTGRES_DB=testdata
+ARG datadir=datadir
 
-# Copy folder into container - Data must be mounted prior to container creation
-COPY scripts/* /docker-entrypoint-initdb.d/
+ENV POSTGRES_PASSWORD=dockerpass \
+    POSTGRES_USER=docker \
+    POSTGRES_DB=testdata
+
+# Install dependencies
+RUN apt update
+RUN apt upgrade -y
+
+
+# Copy data
+COPY $datadir /data

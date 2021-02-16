@@ -37,7 +37,7 @@ ENTRYPOINT ["/usr/bin/tini", "--"]
 # Install dependencies
 RUN conda init
 RUN conda config --add channels conda-forge
-RUN conda install --file requirements.yaml
+RUN conda install --file requirements.txt
 # Test run application
 
 CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]

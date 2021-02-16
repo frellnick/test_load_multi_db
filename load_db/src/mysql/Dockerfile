@@ -5,7 +5,14 @@ ENV MYSQL_PASSWORD=dockerpass \
     MYSQL_DATABASE=testdata \
     MYSQL_ROOT_PASSWORD=dockerpass
 
-# Copy folder into container - Data must be mounted prior to container creation
-COPY scripts/* /docker-entrypoint-initdb.d/
+# Install dependencies
+RUN apt update
+RUN apt upgrade -y
 
-WORKDIR /scripts/
+
+# Copy data
+COPY $datadir /data
+
+# Copy and Run setup scripts
+COPY mysql/scripts /scripts
+# RUN /scripts/set_global.sh

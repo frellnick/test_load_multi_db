@@ -6,24 +6,12 @@ docker build -f path/to/dockerfile -t repo/tag .
 
 
 ## Running with mounted volume
-In order to give multiple containers dynamic access to either a GCS bucket or local drive, the mount must be specified.
+In order to give multiple containers dynamic access to either a GCS bucket or local drive, the mount must be specified or data copied in at build time.
 
 This must be configured at instantiation for the most part.
 
 ```bash
 docker run --mount type=bind,source=/path/to/source,target=/path/to/target
-```
-
-## Examples
-
-PostgreSQL
-* Mounted Volume
-* Username, Password, DatabaseName configured in dockerfile
-```bash
-docker run -d -it -p 5432:5432\
---name testdb \
---mount type=bind,source="$(pwd)"/data,target=/data \
-vbrandon/postgres:v0
 ```
 
 
@@ -36,7 +24,26 @@ vbrandon/postgres:v0
 * MySQL         --local-infile=1
 
 
-### Run Statements
+### Examples
+
+**Build Statements**
+
+* Lazy
+```bash
+docker build --build-arg datadir=/path/to/data/dir \
+--app-dir=path/to/app/dir \
+-f path/to/Dockerfile -t repo/tag:version
+```
+From src/
+```
+docker build --build-arg datadir=data/ -f app/Dockerfile.script -t myrepo/loaddb
+docker build --build-arg datadir=data/ -f postgres/Dockerfile -t myrepo/postgres
+docker build --build-arg datadir=data/ -f mysql/Dockerfile -t myrepo/mysql
+```
+
+
+
+**Run Statements**
 * loader        docker run --name pyloader --network host --mount type=bind,source=/path/to/data/folder,target=/data vbrandon/pyloader python app.py --dbtype postgres --uri postgres://docker:dockerpass@127.0.0.1:5432/testdata
 * MySQL         docker run -it -p 3306:3306 --network network --name testmsql --mount type=bind,source=/path/to/data/folder,targer=/data repo/mysql:tag --local-infile=1
 * PostgreSQL    docker run -it -p 5432:5432 --network network --name testpostgres --mount type=bind,source=/path/to/data/folder,target=/data repo/postgres:tag
