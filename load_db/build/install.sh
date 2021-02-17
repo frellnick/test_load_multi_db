@@ -47,8 +47,14 @@ CREATE DATABASE testdata;
 CREATE USER 'docker' IDENTIFIED BY 'dockerpass';
 GRANT ALL ON testdata.* TO 'docker';
 
+<<<<<<< HEAD
 # Get loading application & data
 cd /~
+=======
+# Get loading application & data  
+# DEPRACATING - MOVING THIS PART TO STARTUP SCRIPTS
+cd ~
+>>>>>>> autobuild
 git clone https://github.com/newnativeabq/docker_tests
 sudo mkdir /app
 sudo cp -R docker_tests/load_db/src/app/* /app/
