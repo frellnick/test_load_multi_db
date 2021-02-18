@@ -17,7 +17,8 @@ Follow instructions in load_db/build/install.sh <- script may or may not be exec
 **Create a Test Network**
 1.  Log into cloud console or cloud SDK
 2.  Create VPC network for test resources.  Example: name=test-net, subnet-name=test-net-single-region, subet-region=us-central1, ip-address-range=10.0.0.0/9, private-google-access='On'
-3.  Update firewall rules -> ADD RULE: ingress, tcp=22,3389, network=test-net, source-ip=35.235.240.0/20, tags=test-db
+3.  Update firewall rules -> ADD RULE: ingress, tcp=22,3389, network=test-net, source-ip=35.235.240.0/20, All Instances
+4.  Update firewall rules -> ADD RULE: ingress, tcp=5432,3306, network=test-net, source-ip=0.0.0.0/0, tags=test-db
 
 **Create a Service Account**
 1.  Log into cloud console or cloud SDK
